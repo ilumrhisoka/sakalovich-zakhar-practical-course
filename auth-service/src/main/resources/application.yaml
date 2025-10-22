@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${AUTH_SERVICE_POSTGRES_HOST}:${AUTH_SERVICE_POSTGRES_PORT}/${AUTH_SERVICE_POSTGRES_DB}
+    username: ${AUTH_SERVICE_POSTGRES_USER}
+    password: ${AUTH_SERVICE_POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  application:
+    name: authorization-service
+
+server:
+  port: 8001
+
+secret:
+  key: ${SECRET_KEY}
+  ttl:
+    access: 9000000
+    refresh: 10080000
+
+springdoc:
+  swagger-ui:
+    url: /v3/api-docs
+    config-url: /v3/api-docs/swagger-config
+    disable-swagger-default-url: true
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs

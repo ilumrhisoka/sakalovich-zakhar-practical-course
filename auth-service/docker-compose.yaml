@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+
+  auth-service-db:
+
+    image: postgres:16
+    container_name: auth-service-db
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${AUTH_SERVICE_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${AUTH_SERVICE_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${AUTH_SERVICE_POSTGRES_DB}
+    ports:
+      - "5401:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: auth-service
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    environment:
+      - AUTH_SERVICE_POSTGRES_HOST=${AUTH_SERVICE_POSTGRES_HOST}
+      - AUTH_SERVICE_POSTGRES_PORT=${AUTH_SERVICE_POSTGRES_PORT}
+      - AUTH_SERVICE_POSTGRES_DB=${AUTH_SERVICE_POSTGRES_DB}
+      - AUTH_SERVICE_POSTGRES_USER=${AUTH_SERVICE_POSTGRES_USER}
+      - AUTH_SERVICE_POSTGRES_PASSWORD=${AUTH_SERVICE_POSTGRES_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+    depends_on:
+      - auth-service-db
+
+
+volumes:
+  pgdata:
